@@ -1,0 +1,189 @@
+1 - General features
+	https://www.researchgate.net/publication/346359767_Audio_Features_for_Music_Emotion_Recognition_a_Survey
+2 - Specific essentia features
+	https://repositori.upf.edu/bitstream/handle/10230/32252/essentia_ismir_2013.pdf?sequence=1&isAllowed=y
+
+############
+## MELODY ##
+############
+++ Pitch ++
+	Pitch salience:
+		lowlevel.pitch_salience (mean var) 1
+	
+
+#############
+## HARMONY ##
+#############
+++ Harmonic perception (harmonic intervals) ++
+	Chromagram: 12 dimensions, one for each semitone
+		tonal.hpcp (mean var) 36
+		tonal.hpcp_crest (mean var) 1
+		tonal.hpcp_entropy (mean var) 1
+
+	Chord sequence: Information about chords rather than the sequence.
+		tonal.chords_changes_rate 1
+		tonal.chords_histogram 24
+		tonal.chords_key (str) 1
+		tonal.chords_number_rate 1
+		tonal.chords_scale (str) 1
+		tonal.chords_strength (mean var) 1
+
+++ Harmony (tonality) ++ 
+	Tuning frequency:
+		tonal.tuning_frequency 1
+
+	Key:
+		tonal.key_edma.key (str) 1
+		tonal.key_krumhansl.key (str) 1
+		tonal.key_temperley.key (str) 1
+
+	Key strength:
+		tonal.tuning_diatonic_strength 1
+		tonal.key_edma.strength 1
+		tonal.key_krumhansl.strength 1
+		tonal.key_temperley.strength 1
+
+++ Harmony (mode) ++ 
+	Modality (scale):
+		tonal.key_edma.scale (str) 1
+		tonal.key_krumhansl.scale (str) 1
+		tonal.key_temperley.scale (str) 1
+
+############
+## RHYTHM ##
+############
+++ Tempo ++
+	Event density:
+		rhythm.onset_rate 1
+
+	Tempo:
+		rhythm.bpm 1
+
+	Harmonically Wrapped Peak Similarity (HWPS):
+		rhythm.bpm_histogram_first_peak_bpm 1
+		rhythm.bpm_histogram_first_peak_weight 1
+		rhythm.bpm_histogram_second_peak_bpm 1
+		rhythm.bpm_histogram_second_peak_spread 1
+		rhythm.bpm_histogram_second_peak_weight 1
+
+++ Rhythm types ++
+	Pulse/rhythm clarity:
+		rhythm.beats_loudness (mean var) 1
+		rhythm.beats_loudness_band_ratio (mean var) 6
+
+	Danceability:
+		rhythm.danceability 1
+
+
+##############
+## DYNAMICS ##
+##############
+++ Dynamics levels ++
+	RMS Energy:
+		lowlevel.spectral_rms (mean var) 1
+
+	Loudness:
+		lowlevel.average_loudness 1
+		lowlevel.loudness_ebu128.integrated 1
+		lowlevel.loudness_ebu128.loudness_range 1
+		lowlevel.loudness_ebu128.momentary (mean var) 1
+		lowlevel.loudness_ebu128.short_term (mean var) 1
+
+
+############
+## TIMBRE ##
+############
+++ Amplitude envelope ++
+	Zero crossing rate: 
+		lowlevel.zerocrossingrate (mean var) 1
+
+++ Spectral features ++
+	Spectral characteristics:
+		lowlevel.spectral_entropy (mean var) 1
+		lowlevel.spectral_flux (mean var) 1
+		lowlevel.spectral_rolloff (mean var) 1
+		lowlevel.spectral_contrast_coeffs (mean var) 6
+		lowlevel.spectral_contrast_valleys (mean var) 6
+		lowlevel.spectral_complexity (mean var) 1
+		lowlevel.spectral_decrease (mean var) 1
+		lowlevel.spectral_strongpeak (mean var) 1
+
+	High-frequency energy:
+		lowlevel.hfc.mean
+		lowlevel.spectral_energy (mean var) 1
+		lowlevel.spectral_energyband_high (mean var) 1
+		lowlevel.spectral_energyband_low (mean var) 1
+		lowlevel.spectral_energyband_middle_high (mean var) 1
+		lowlevel.spectral_energyband_middle_low (mean var) 1
+
+	Spectral moments:
+		lowlevel.spectral_centroid (mean var) 1
+		lowlevel.spectral_spread (mean var) 1
+		lowlevel.spectral_skewness (mean var) 1
+		lowlevel.spectral_kurtosis (mean var) 1
+
+	Mel bands:
+		lowlevel.melbands.mean (mean var) 40
+		lowlevel.melbands_crest (mean var) 1
+		lowlevel.melbands_flatness_db (mean var) 1
+		lowlevel.melbands_kurtosis (mean var) 1
+		lowlevel.melbands_skewness (mean var) 1
+		lowlevel.melbands_spread (mean var) 1
+
+	Bark bands:
+		lowlevel.barkbands (mean var) 27
+		lowlevel.barkbands_crest (mean var) 1
+		lowlevel.barkbands_flatness_db (mean var) 1
+		lowlevel.barkbands_kurtosis (mean var) 1
+		lowlevel.barkbands_skewness (mean var) 1
+		lowlevel.barkbands_spread (mean var) 1
+
+	ERB bands:
+		lowlevel.erbbands (mean var) 40
+		lowlevel.erbbands_crest (mean var) 1
+		lowlevel.erbbands_flatness_db (mean var) 1
+		lowlevel.erbbands_kurtosis (mean var) 1
+		lowlevel.erbbands_skewness (mean var) 1
+		lowlevel.erbbands_spread (mean var) 1
+
+	Mel-Frequency Cepstral Coefficients (MFCC):
+		lowlevel.mfcc (mean and cov) 13 (and 13x13)
+
+	Gammatone-Frequency Cepstral Coefficients (GFCC):
+		lowlevel.gfcc (mean and cov) 13 (and 13x13)
+
+	Sensory dissonance:
+		lowlevel.dissonance (mean var) 1
+
+
+
+##################
+## EXPRESSIVITY ##
+##################
+
+++ Articulation ++
+	Average silence ratio:
+		lowlevel.silence_rate_20dB (mean var) 1
+		lowlevel.silence_rate_30dB (mean var) 1
+		lowlevel.silence_rate_60dB (mean var) 1
+
+
+################
+## HIGH-LEVEL ##
+################
+???
+
+#############
+## TEXTURE ##
+#############
+???
+
+##########
+## FORM ##
+##########
+???
+
+###########
+## VOCAL ##
+###########
+

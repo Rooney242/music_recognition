@@ -1,0 +1,281 @@
+##################
+### 18/02/2021 ###
+##################
+
+2 hours
+
+---INTERESTING TOPICS---
+-Related with measuring arousal and valence (emotion in music)
+	Analyzing audio or features to make classification (playlists)
+
+
+---TOPICS TO TALK---
+-Analyze audio or get dataset with already extracted features
+	-Case analyze audio:
+		-What program to use?
+		-Could we do something as estimating emotion of the song, (valence and arousal or similar metrics)
+		-Use a dataset with these values and software to recreate it and train/test
+	-Case using extracted features:
+		-Some kind of classification, posibly unsupervised
+
+-Separate instruments from track (using SMS)
+
+##################
+### 23/02/2021 ###
+##################
+
+2 hours
+
+seeing 2 previous thesis for getting ideas:
+	- 359393_LIANA_MEHRABYAN_TFM
+	- TFM_Gonzalo_Lencina_Lorenzon
+
+questions:
+- Both have in common the valence and arousal description. Can I do that too? ---> A LOT of references for the description
+- Which techniques to use once we have the dataset?
+- It is clear that the thesis will use arousal/valence relation, but it is necessary to do something more specific? --> what about including dominance??
+	-DEAP dataset contains dominance: https://www.eecs.qmul.ac.uk/mmv/datasets/deap/readme.html
+	-Using medieval dataset: https://link.springer.com/article/10.1007/s00779-020-01393-4
+
+- Search dataset and techniques to extract conclusions around these values ---> Search in the internet for interesting things, possibly from 2020 as they will be new and different from this thesis
+	+ Datasets: Mediaeval (MTG-Jamendo Dataset) (using Essentia)
+	+ Machine learning techniques:
+
+
+##################
+### 12/04/2021 ###
+##################
+
+2 hours
+
+-Seeing references for synthetic features:
+https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.734.5247&rep=rep1&type=pdf
+
+-Seeing featuretools for development: https://featuretools.alteryx.com/en/stable/index.html
+
+	- How do we apply this things to our dataset?
+
+-Creating environment in Overleaf for writing
+
+
+##################
+### 01/06/2021 ###
+##################
+
+2 hours
+
+- Find a defined workflow: dataset -> tool -> output
+	- Focusing on getting a good dataset
+	- Probably we will use Essentia to extract features, group by time and use synthetic features for the relations instead
+		of only the mean.
+
+general paper for emotion recognition, could serve as comparison:
+	https://bura.brunel.ac.uk/bitstream/2438/13139/1/FullText.pdf
+
+Conclusion: We will be using Essentia for the feature extraction. We now need a good paper where we can find a dataset to replicate using feature extraction.
+
+
+##################
+### 02/06/2021 ###
+##################
+
+2 hours
+
+Focusing on getting a good paper to replicate and then start development of a basic application
+
+- Feature extraction description for having a wide variety of features:
+	https://www.researchgate.net/publication/346359767_Audio_Features_for_Music_Emotion_Recognition_a_Survey
+
+- Ideas for MER datasets:
+	https://groups.google.com/a/ismir.net/g/community/c/QTaPVQcnsyo?pli=1
+
+- Paper using AMG1608 dataset:
+	https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7178058
+
+conclusion: we get several datasets (amg1608, emomusic and modal and see what can be done with them)
+
+
+##################
+### 03/06/2021 ###
+##################
+
+3 hours
+
+We are going to order a bit all of the references.
+
+We are going to select what features to extract and try to do it with Essentia
+
+Conclusion: Using the paper for the feature extraction we can select a lot of features from our dataset. Now the question is how to use synthetic features with the features that we have found. We will ask Emilio on Monday
+
+
+we also write emilio for asking a meeting next week
+
+
+##################
+### 07/06/2021 ###
+##################
+1 hour
+
+QUESTIONS FOR EMILIO:
+	- Show him all the workflow:
+		Datasets we have
+		Essentia extraction for features
+		Ask wheter to use some features or not
+
+	- Regarding synthetic features
+		- Essentia has a variety of metrics for floats ["mean", "var", "stdev", "median", "min", "max", "dmean", "dmean2", "dvar", "dvar2"]
+		- Is it really necesary to use featuretools? We can have windows of a defined length and use featuretools, but Using just Essentia sounds just fine
+
+		Usar lda para esto como vimos en clase con bag of words
+		que es mejor, atacar a los trozos o atacar al total
+		oversampling
+		reproducir lo de amg1608
+
+
+##################
+### 08/06/2021 ###
+##################
+5 hours
+
+Today's goal is to understand the features and somehow find a study to compare performance. We will define some tasks to do over the week.
+
+	- Define which features to use
+	- Use different windows (from 15s in increments of 0.5s) and try to estimate valence and arousal
+	- Reproduce the amg1608 system to our dataset
+	- Look up oversampling
+	- Look up LDA algorithm and do something as bag of words
+
+Here we did the feature selection respect to different musical aspects
+
+##################
+### 09/06/2021 ###
+##################
+
+6 hours
+
+Here we understand the features we are using and its dimension. We also create an environment to reproduce the features for the whole 44 seconds of song or each x seconds (windows)
+
+
+
+##################
+### 10/06/2021 ###
+##################
+
+4 hours
+
+We do a complete feature extraction for all of the songs and for each song in windows of 15 seconds.
+
+
+
+##################
+### 14/06/2021 ###
+##################
+- modelos de mezclas de gausianas
+- reduccion de dimensiones
+- quitar muchas de las anotacione que se solapan
+- modelos ocultos de markov
+
+3 hour
+
+Meeting with Emilio. we have defined how the actual works is going to be:
+
+-We will do a baseline model only with the general features of all the song
+-Then, using hidden markov models, we will try to add more information about the dynamics of the song:
+	- First histograms to get only the occurences
+	- Then the amount of changes
+	_ Finally the orther of the different states
+
+
+
+Tasks:
+	- Encode string features
+	- Select global features
+	- Select continuous features
+
+Once we have defined the two set of features we have to try to mount different models and see the performance
+
+
+##################
+### 16/06/2021 ###
+##################
+
+3 hours
+
+Today we have decided the general structure of the model. Starting with audio, we get the static features and the continuous features. Then use a model (SVM or random_forest) for predicting static features and some sequential model (RNN or HMM) for predicting continuous features. From here we have mainly 3 topics to investigate and develope:
+
++ Emotions
+	- Classify emotions in groups and subgroups and define the thresholds for valence and arousal that determine each group. The idea might be use two-dimensional gaussians. This include scaling everything between [-1, 1] or the thresholds that we need.
+
++ Static features
+	- Which model is better to use for predicting raw valence and arousal. Take into account that we have mean and std.
+
++ Continuous features
+	- Define the best model to use
+	- For HMM, define the states or finish watching the class for more tasks
+
+
+Apart from that, we have investigate how the continuous and static annotations are related. They tend to be the same once scaled in mean or last value, but there could be another approaches to follow.
+
+##################
+### 17/06/2021 ###
+##################
+
+Finish HMM class and decide how to use it
+Investigate emotions in va space and decide division
+
+##################
+### 18/06/2021 ###
+##################
+
+3 hours
+
+- Redo continuous features for RNN
+- Create basic random forest for static features
+
+##################
+### 21/06/2021 ###
+##################
+
+4 hours
+
+Questions for Emilio:
+
++ Regarding static features:
+	- Explain how we have already done the classifier for the static features. --> It is OK
+	- Use mean and std information to predict better. --> We can predict the std to get the agreed songs and the controversial songs.
+	- Hyper-parameter tunning -> hacer dummy classifier
+
++ Regarding continuous features:
+	- We can use that the final valence and arousal should be near the mean/last valence and arousal. --> Use Gaussian mixture models and HMM to define states.
+	- How to link a HMM to the features or the valence/arousal we have.
+	- Usage of LSTM or CNN for these features. --> Later
+
++ Regarding emotions in general
+	- Clasify emotions in gaussians
+
+Task organization for the week:
+
+- Scale MSE results to get the percentage of variation respect to the whole range
+- Gaussian mixture models to define states. Metric for number of states: verosimility
+- Hidden Markov models to get the importance of the transitions
+- Emotion discretization for clasification
+
+
+Today:
+- Generate naive classifier
+- Scale MSE
+- Save model hyper-parameters and models itself and compare
+- Watch GMM class
+
+
+
+
+42 hours
+
+
+
+
+
+
+
+

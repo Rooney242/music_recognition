@@ -1,0 +1,78 @@
+{
+    "arousal_mean": {
+        "naive": {
+            "adjusted_error": 0.24941252384849005
+        },
+        "static_rf": {
+            "best_params": {
+                "n_estimators": 100,
+                "max_depth": 10,
+                "min_samples_leaf": 0.10009433967117544,
+                "min_impurity_decrease": 0.4737045374002173,
+                "ccp_alpha": 1.026981121440964e-05
+            },
+            "adjusted_error": 0.18916602878005664
+        },
+        "states_gmm": {},
+        "transitions_hmm": {},
+        "transitions_lstm": {},
+        "transitions_cnn": {}
+    },
+    "arousal_std": {
+        "naive": {
+            "adjusted_error": 0.21841330618870172
+        },
+        "static_rf": {
+            "best_params": {
+                "n_estimators": 250,
+                "max_depth": 20,
+                "min_samples_leaf": 0.1835951540484684,
+                "min_impurity_decrease": 0.24967090021475286,
+                "ccp_alpha": 0.0054091335881779785
+            },
+            "adjusted_error": 0.2204870987777574
+        },
+        "states_gmm": {},
+        "transitions_hmm": {},
+        "transitions_lstm": {},
+        "transitions_cnn": {}
+    },
+    "valence_mean": {
+        "naive": {
+            "adjusted_error": 0.24716363322891968
+        },
+        "static_rf": {
+            "best_params": {
+                "n_estimators": 100,
+                "max_depth": 16,
+                "min_samples_leaf": 0.10040343908661478,
+                "min_impurity_decrease": 0.1847002312654995,
+                "ccp_alpha": 1.1116465961356729e-05
+            },
+            "adjusted_error": 0.17299494818863095
+        },
+        "states_gmm": {},
+        "transitions_hmm": {},
+        "transitions_lstm": {},
+        "transitions_cnn": {}
+    },
+    "valence_std": {
+        "naive": {
+            "adjusted_error": 0.2225027036239607
+        },
+        "static_rf": {
+            "best_params": {
+                "n_estimators": 200,
+                "max_depth": 10,
+                "min_samples_leaf": 0.49794906189719285,
+                "min_impurity_decrease": 0.31006140633086604,
+                "ccp_alpha": 4.33269275390538e-05
+            },
+            "adjusted_error": 0.22609484845381045
+        },
+        "states_gmm": {},
+        "transitions_hmm": {},
+        "transitions_lstm": {},
+        "transitions_cnn": {}
+    }
+}
