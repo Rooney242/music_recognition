@@ -18,8 +18,8 @@ from sklearn.naive_bayes import GaussianNB
 import optuna
 import optuna.visualization as ov
 
-ann_path = '../datasets/emomusic/annotations/'
-clips_path = '../datasets/emomusic/clips/'
+ann_path = '../emomusic/annotations/'
+clips_path = '../emomusic/clips/'
 random_state = 242
 
 #Getting train and test indices

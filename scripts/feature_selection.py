@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 
-ann_path = '../datasets/emomusic/annotations/'
-clips_path = '../datasets/emomusic/clips/'
+ann_path = '../emomusic/annotations/'
+clips_path = '../emomusic/clips/'
 ext = '.mp3'
 dsr = 44100
 

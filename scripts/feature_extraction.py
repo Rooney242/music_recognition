@@ -13,8 +13,8 @@ pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', -1)'''
 
 #definitions
-ann_path = '../datasets/emomusic/annotations/'
-clips_path = '../datasets/emomusic/clips/'
+ann_path = '../emomusic/annotations/'
+clips_path = '../emomusic/clips/'
 ext = '.mp3'
 dsr = 44100
 
