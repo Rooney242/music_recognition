@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import sys
 
 ann_path = '../emomusic/annotations/'
 clips_path = '../emomusic/clips/'
@@ -149,7 +150,7 @@ cont_feat_dic = {
 #####################
 ## STATIC FEATURES ##
 #####################
-stat_column_list = []
+'''stat_column_list = []
 for mus_dim, mus_dim_val in stat_feat_dic.items():
     for mus_elem, mus_elem_val in mus_dim_val.items():
         for mus_feat, mus_feat_val in mus_elem_val.items():
@@ -203,7 +204,7 @@ df['valence_std'] = df['valence_std'].apply(lambda x: x/4)
 
 print(df.shape)
 
-df.to_parquet(ann_path+'static_selected_features.pqt')
+df.to_parquet(ann_path+'static_selected_features.pqt')'''
 
 #########################
 ## CONTINUOUS FEATURES ##
@@ -224,12 +225,26 @@ cont_column_list.append('arousal_std')
 cont_column_list.append('valence_mean')
 cont_column_list.append('valence_std')
 
-df = pd.read_parquet(ann_path+'cont_features.pqt')
+stat = pd.read_parquet(ann_path+'static_features.pqt')
+
+df = pd.read_parquet(ann_path+'cont_features_5+25.pqt')
 df = df[cont_column_list]
 
 
-indices = [i for i in df.index if int(i.split('_')[1]) in range(15000, 45001, 3000)]
-df = df.loc[indices]
+for song_id in stat.index:
 
-print(df.shape)
-df.to_parquet(ann_path+'cont_selected_features.pqt')
+    #data completion
+    comp_idxs = [str(song_id)+'_'+str(i) for i in range(0, 10000, 2500)]
+    weights = [i for i in np.arange(0, 1, 1/4)]
+    df.loc[comp_idxs, 'arousal_mean'] = [i*j for i,j in zip([df.loc[str(song_id)+'_10000']['arousal_mean']]*4,weights)]
+    df.loc[comp_idxs, 'valence_mean'] = [i*j for i,j in zip([df.loc[str(song_id)+'_10000']['valence_mean']]*4,weights)]
+    df.loc[comp_idxs, 'arousal_std'] = [1-i*j for i,j in zip([1-df.loc[str(song_id)+'_10000']['arousal_std']]*4,weights)]
+    df.loc[comp_idxs, 'valence_std'] = [1-i*j for i,j in zip([1-df.loc[str(song_id)+'_10000']['valence_std']]*4,weights)]
+
+    ren_dic = {}
+    for sam in range(0, 40001, 2500):
+        ren_dic[str(song_id)+'_'+str(sam)] = str(song_id)+'_'+str(sam+5000)
+    df = df.rename(index=ren_dic)
+df = df[cont_column_list]
+
+df.to_parquet(ann_path+'cont_selected_features_5+25.pqt')
