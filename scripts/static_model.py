@@ -7,6 +7,7 @@ import sys
 import time
 import math
 import json
+import pickle
 
 from sklearn.experimental import enable_iterative_imputer
 from sklearn import preprocessing, impute, model_selection, metrics, neighbors, ensemble, feature_selection
@@ -173,9 +174,7 @@ for set_name, set_train, set_test in train_sets:
     set_pred = best.predict(x_test)
     models[set_name]['static_rf']['adjusted_error'] = math.sqrt(metrics.mean_squared_error(set_test, set_pred))/ran(set_test)
 
-
-
-
+pickle.dump(best, open('static_model.pkl', 'wb'))
 
 
 with open('models', 'w') as f:
