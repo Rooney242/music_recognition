@@ -12,13 +12,13 @@ stat_feat_dic = {
 	'harmony': {
         'intervals': {
             'chromagram':{
-                'hpcp': ('tonal.hpcp.mean', 36),
+                #'hpcp': ('tonal.hpcp.mean', 36),
                 'hpcp_crest': ('tonal.hpcp_crest.mean', 1),
                 'hpcp_entropy': ('tonal.hpcp_entropy.mean', 1)
             },
             'chord_sequence':{
                 'changes_rate': ('tonal.chords_changes_rate', 1),
-                'histogram': ('tonal.chords_histogram', 24),
+                #'histogram': ('tonal.chords_histogram', 24),
                 'number_rate': ('tonal.chords_number_rate', 1),
                 'strength': ('tonal.chords_strength.mean', 1)
             }
@@ -67,6 +67,20 @@ stat_feat_dic = {
         },
     },
 }
+
+'''cont_feat_dic = {
+    'timbre': {
+        'spectral_features': {
+            'mel_bands': {
+                'mel_bands': ('lowlevel.melbands.mean', 40)
+            },
+            'mfcc': {
+                'mfcc': ('lowlevel.mfcc.mean', 13)
+            },
+        }
+    },
+}'''
+
 cont_feat_dic = {
     'melody': {
         'pitch':{
@@ -99,8 +113,8 @@ cont_feat_dic = {
                 'entropy': ('lowlevel.spectral_entropy.mean', 1),
                 'flux': ('lowlevel.spectral_flux.mean', 1),
                 'rolloff': ('lowlevel.spectral_rolloff.mean', 1),
-                'contrast_coefs': ('lowlevel.spectral_contrast_coeffs.mean', 6),
-                'valleys': ('lowlevel.spectral_contrast_valleys.mean', 6),
+                #'contrast_coefs': ('lowlevel.spectral_contrast_coeffs.mean', 6),
+                #'valleys': ('lowlevel.spectral_contrast_valleys.mean', 6),
                 'complexity': ('lowlevel.spectral_complexity.mean', 1),
                 'decrease': ('lowlevel.spectral_decrease.mean', 1),
                 'strongpeak': ('lowlevel.spectral_strongpeak.mean', 1)
@@ -120,16 +134,16 @@ cont_feat_dic = {
                 'kurtosis': ('lowlevel.spectral_kurtosis.mean', 1)
             },
             'mel_bands': {
-                'mel_bands': ('lowlevel.melbands.mean', 40),
+                #'mel_bands': ('lowlevel.melbands.mean', 40),
                 'crest': ('lowlevel.melbands_crest.mean', 1),
                 'flatness_db': ('lowlevel.melbands_flatness_db.mean', 1),
                 'kurtosis': ('lowlevel.melbands_kurtosis.mean', 1),
                 'skewness': ('lowlevel.melbands_skewness.mean', 1),
                 'spread': ('lowlevel.melbands_spread.mean', 1)
             },
-            'mfcc': {
-                'mfcc': ('lowlevel.mfcc.mean', 13)
-            },
+            #'mfcc': {
+            #    'mfcc': ('lowlevel.mfcc.mean', 13)
+            #},
             'sensory_dissonance': {
                 'sensory_dissonance': ('lowlevel.dissonance.mean', 1)
             }
@@ -145,7 +159,6 @@ cont_feat_dic = {
         }
     }
 }
-
 
 #####################
 ## STATIC FEATURES ##
@@ -220,31 +233,15 @@ for mus_dim, mus_dim_val in cont_feat_dic.items():
                         cont_column_list.append('.'.join([mus_dim, mus_elem, mus_feat, char])+'_'+str(i))
                 else:
                     cont_column_list.append('.'.join([mus_dim, mus_elem, mus_feat, char]))
-cont_column_list.append('arousal_mean')
+'''cont_column_list.append('arousal_mean')
 cont_column_list.append('arousal_std')
 cont_column_list.append('valence_mean')
-cont_column_list.append('valence_std')
+cont_column_list.append('valence_std')'''
 
 stat = pd.read_parquet(ann_path+'static_features.pqt')
 
-df = pd.read_parquet(ann_path+'cont_features_5+25.pqt')
+df = pd.read_parquet(ann_path+'cont_features_5000.pqt')
 df = df[cont_column_list]
 
-
-for song_id in stat.index:
-
-    #data completion
-    comp_idxs = [str(song_id)+'_'+str(i) for i in range(0, 10000, 2500)]
-    weights = [i for i in np.arange(0, 1, 1/4)]
-    df.loc[comp_idxs, 'arousal_mean'] = [i*j for i,j in zip([df.loc[str(song_id)+'_10000']['arousal_mean']]*4,weights)]
-    df.loc[comp_idxs, 'valence_mean'] = [i*j for i,j in zip([df.loc[str(song_id)+'_10000']['valence_mean']]*4,weights)]
-    df.loc[comp_idxs, 'arousal_std'] = [1-i*j for i,j in zip([1-df.loc[str(song_id)+'_10000']['arousal_std']]*4,weights)]
-    df.loc[comp_idxs, 'valence_std'] = [1-i*j for i,j in zip([1-df.loc[str(song_id)+'_10000']['valence_std']]*4,weights)]
-
-    ren_dic = {}
-    for sam in range(0, 40001, 2500):
-        ren_dic[str(song_id)+'_'+str(sam)] = str(song_id)+'_'+str(sam+5000)
-    df = df.rename(index=ren_dic)
-df = df[cont_column_list]
-
-df.to_parquet(ann_path+'cont_selected_features_5+25.pqt')
+print(df.shape)
+df.to_parquet(ann_path+'cont_selected_features_5000.pqt')

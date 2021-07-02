@@ -278,7 +278,62 @@ Tasks done:
 	- Create a GMM model for different scopes and find the best K and covariance type
 
 
-52 hours
+##################
+### 25/06/2021 ###
+##################
+
+6 hours
+
+Different tries to optimize continuous feature model, but it keeps being worse than just the static model.
+- Using different Ks
+- Using just the states to predict
+- Using states + previous prediction
+- Using all of the features
+
+Questions:
+	- How to deal with continuous features situation
+	- How to normalize error correctly
+	
+##################
+### 28/06/2021 ###
+##################
+
+4 hours
+
+Meet with Emilio. We change a few things to try to get better results with the continuous features.
+
+- Start using R square as our optimization metric for its interpretability.
+- Use greater windows to see if states are significant that way
+- Use per musical feature states
+
+This day we try a few variants, but none of them were improving the model
+
+##################
+### 29/06/2021 ###
+##################
+
+6 hours
+
+Now we use different window ranges as 10 and 15 seconds and we get similar results than just using the static features. Moreover, we divide the state definition by musical element and codify the percentage of time in each state.
+
+Future work is to get the transitions between states as an improvement
+
+##################
+### 02/07/2021 ###
+##################
+
+6 hours
+
+Definiing final steps for the project:
+- We will have 3 different time ranges for continuous features (5, 10, 15) with a minimum window size of 2500
+
+We have some tasks for the next week:
+- Get a model estimation performance per window size and window shift
+- Feature selection with random forest
+- Create CNN for comparison
+
+
+74 hours
 
 
 

@@ -63,10 +63,15 @@ va_std_pred = np.full(va_std_test.shape, np.mean(va_std_train))
 #Getting adjusted mse
 def ran(l):
     return np.ptp(l)
-ar_mean_ad_mse = math.sqrt(metrics.mean_squared_error(ar_mean_test, ar_mean_pred))/ran(ar_mean_test)
+'''ar_mean_ad_mse = math.sqrt(metrics.mean_squared_error(ar_mean_test, ar_mean_pred))/ran(ar_mean_test)
 ar_std_ad_mse = math.sqrt(metrics.mean_squared_error(ar_std_test, ar_std_pred))/ran(ar_std_test)
 va_mean_ad_mse = math.sqrt(metrics.mean_squared_error(va_mean_test, va_mean_pred))/ran(va_mean_test)
-va_std_ad_mse = math.sqrt(metrics.mean_squared_error(va_std_test, va_std_pred))/ran(va_std_test)
+va_std_ad_mse = math.sqrt(metrics.mean_squared_error(va_std_test, va_std_pred))/ran(va_std_test)'''
+
+ar_mean_ad_mse = metrics.r2_score(ar_mean_test, ar_mean_pred)
+ar_std_ad_mse = metrics.r2_score(ar_std_test, ar_std_pred)
+va_mean_ad_mse = metrics.r2_score(va_mean_test, va_mean_pred)
+va_std_ad_mse = metrics.r2_score(va_std_test, va_std_pred)
 
 
 with open('models', 'r') as f:

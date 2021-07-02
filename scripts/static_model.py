@@ -24,6 +24,10 @@ mod_path = '../models/'
 clips_path = '../emomusic/clips/'
 random_state = 333
 
+#configuration
+conf = json.load(open('models_conf', 'r'))
+
+
 #Getting train and test indices
 df = pd.read_csv(ann_path+'songs_info.csv')
 df = df[['song_id', 'Mediaeval 2013 set']]
@@ -52,37 +56,34 @@ ar_std_test = ar_std.loc[test_idx]
 va_mean_test = va_mean.loc[test_idx]
 va_std_test = va_std.loc[test_idx]
 
-train_sets = [('arousal_mean', ar_mean_train, ar_mean_test), ('arousal_std', ar_std_train, ar_std_test), ('valence_mean', va_mean_train, va_mean_test), ('valence_std', va_std_train, va_std_test)]
+#train_sets = [('arousal_mean', ar_mean_train, ar_mean_test), ('arousal_std', ar_std_train, ar_std_test), ('valence_mean', va_mean_train, va_mean_test), ('valence_std', va_std_train, va_std_test)]
+train_sets = [('arousal_mean', ar_mean_train, ar_mean_test), ('valence_mean', va_mean_train, va_mean_test)]
 
 
 #models information
 with open('models', 'r') as f:
     models = json.load(f)
 
-
-def ran(l):
-    return np.ptp(l)
-
 ##############
 ## TRAINING ##
 ##############
 #Creating k-folds
-'''folds = 8
+folds = 8
 kf = model_selection.KFold(n_splits=folds, shuffle=True, random_state=random_state)
 
 #training random forest
-budget = 20
-min_max_depth = 5
-max_max_depth = 20
-min_n_estimators = 50
-max_n_estimators = 250
-step_n_estimators = 50
-min_min_samples_leaf = 0.1
-max_min_samples_leaf = 0.5
-min_min_impurity_decrease = 0.1
-max_min_impurity_decrease = 0.5
-min_ccp_alpha = 1e-5
-max_ccp_alpha = 1e-2
+budget = conf['budget']
+min_max_depth = conf['min_max_depth']
+max_max_depth = conf['max_max_depth']
+min_n_estimators = conf['min_n_estimators']
+max_n_estimators = conf['max_n_estimators']
+step_n_estimators = conf['step_n_estimators']
+min_min_samples_leaf = conf['min_min_samples_leaf']
+max_min_samples_leaf = conf['max_min_samples_leaf']
+min_min_impurity_decrease = conf['min_min_impurity_decrease']
+max_min_impurity_decrease = conf['max_min_impurity_decrease']
+min_ccp_alpha = conf['min_ccp_alpha']
+max_ccp_alpha = conf['max_ccp_alpha']
 
 
 class random_forest_objective(object):
@@ -114,7 +115,7 @@ class random_forest_objective(object):
             )
         
         #we use 3 scores and optimize its mean
-        scoring = ['neg_mean_squared_error']
+        scoring = ['r2']
         scores = model_selection.cross_validate(
             clf, x_train, set_train, 
             scoring=scoring, cv = kf)
@@ -124,9 +125,10 @@ class random_forest_objective(object):
 
         l = np.asarray([s for k, s in scores.items()])
 
-        #print(l.mean(), l.std())
-
-        return l.mean()
+        if conf['norm_std']:
+            return l.mean()/l.std()
+        else:
+            return l.mean()
 
 
 for set_name, set_train, set_test in train_sets:
@@ -149,14 +151,15 @@ for set_name, set_train, set_test in train_sets:
     best = ensemble.RandomForestRegressor()
     best = best.fit(x_train, set_train)
     set_pred = best.predict(x_test)
-    models[set_name]['static_rf']['adjusted_error'] = math.sqrt(metrics.mean_squared_error(set_test, set_pred))/ran(set_test)'''
+    models[set_name]['static_rf']['adjusted_error'] = metrics.r2_score(set_test, set_pred)
+    pickle.dump(best, open(mod_path+'static_model_'+set_name+'.pkl', 'wb'))
 
 
 #############
 ## LOADING ##
 #############
 
-for set_name, set_train, set_test in train_sets:
+'''for set_name, set_train, set_test in train_sets:
     best = ensemble.RandomForestRegressor(
         random_state=random_state,
         #criterion=models[set_name]['static_rf']['best_params']['criterion'],
@@ -172,9 +175,7 @@ for set_name, set_train, set_test in train_sets:
     best = ensemble.RandomForestRegressor()
     best = best.fit(x_train, set_train)
     set_pred = best.predict(x_test)
-    models[set_name]['static_rf']['adjusted_error'] = math.sqrt(metrics.mean_squared_error(set_test, set_pred))/ran(set_test)
-
-pickle.dump(best, open('static_model.pkl', 'wb'))
+    models[set_name]['static_rf']['adjusted_error'] = metrics.r2_score(set_test, set_pred)'''
 
 
 with open('models', 'w') as f:

@@ -314,10 +314,11 @@ cont_feat.to_parquet(ann_path+'cont_features.pqt')'''
 ###########################
 
 #This time, we get intervals of 5 seconds and with an overlap of 2
-
+window_size_ms = 10000
+window_shift = 2500
 cont_clip_list = []
 for clip_id in stat_clip_list:
-    for sam in range(0, 40001, 2500):
+    for sam in range(window_size_ms, 45001, window_shift):
         cont_clip_list.append(str(clip_id)+'_'+str(sam))
 
 cont_feat = pd.DataFrame(index=cont_clip_list, columns=column_list)
@@ -326,10 +327,10 @@ for i, clip in enumerate(cont_clip_list):
     print('Extracting features from song {} of {}'.format(i, len(cont_clip_list)))
 
     clip_id = clip.split('_')[0]
-    clip_start_ms = int(clip.split('_')[1])
-    clip_start = clip_start_ms /1000
-    clip_end = clip_start + 5
-    clip_end_ms = int(clip_end * 1000)
+    clip_end_ms = int(clip.split('_')[1])
+    clip_start_ms = clip_end_ms - window_size_ms
+    clip_start = clip_start_ms/1000
+    clip_end = clip_end_ms/1000
 
     clip_path = clips_path+clip_id+ext
 
@@ -355,7 +356,7 @@ for i, clip in enumerate(cont_clip_list):
             for mus_feat, mus_feat_val in mus_elem_val.items():
                 for char, char_val in mus_feat_val.items():
                     cont_feat = extract_feature(cont_feat, clip, feats, mus_dim, mus_elem, mus_feat, char)
-                    if clip_end >= 15:
+                    if clip_end_ms >= 15000:
                         cont_feat.loc[clip]['arousal_mean'] = cont_lab.loc[int(clip_id)][str(clip_end_ms)+'_arousal_mean']
                         cont_feat.loc[clip]['arousal_std'] = cont_lab.loc[int(clip_id)][str(clip_end_ms)+'_arousal_std']
                         cont_feat.loc[clip]['valence_mean'] = cont_lab.loc[int(clip_id)][str(clip_end_ms)+'_valence_mean']
@@ -363,4 +364,14 @@ for i, clip in enumerate(cont_clip_list):
                     else:
                         cont_feat.loc[clip]['arousal_mean'] = cont_feat.loc[clip]['arousal_std'] = cont_feat.loc[clip]['valence_mean'] = cont_feat.loc[clip]['valence_std'] = 0
 
-cont_feat.to_parquet(ann_path+'cont_features_2.pqt')
+##Estimation of empty values
+weigths = [round(i, 3) for i in np.arange(0, 1, 1/((15000-window_size_ms)/window_shift))]
+
+for clip_id in stat_clip_list:
+    for i, end_ms in enumerate(range(window_size_ms, 15000, window_shift)):
+        cont_feat.loc[str(clip_id)+'_'+str(end_ms)]['arousal_mean'] = cont_feat.loc[str(clip_id)+'_15000']['arousal_mean']*weigths[i]
+        cont_feat.loc[str(clip_id)+'_'+str(end_ms)]['arousal_std'] = cont_feat.loc[str(clip_id)+'_15000']['arousal_std']*weigths[i]
+        cont_feat.loc[str(clip_id)+'_'+str(end_ms)]['valence_mean'] = cont_feat.loc[str(clip_id)+'_15000']['valence_mean']*weigths[i]
+        cont_feat.loc[str(clip_id)+'_'+str(end_ms)]['valence_std'] = cont_feat.loc[str(clip_id)+'_15000']['valence_std']*weigths[i]
+
+cont_feat.to_parquet(ann_path+'cont_features_'+str(window_size_ms)+'_new.pqt')
