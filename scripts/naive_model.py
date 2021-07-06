@@ -77,10 +77,10 @@ va_std_ad_mse = metrics.r2_score(va_std_test, va_std_pred)
 with open('models', 'r') as f:
     models = json.load(f)
 
-models['arousal_mean']['naive']['adjusted_error'] = ar_mean_ad_mse
-models['arousal_std']['naive']['adjusted_error'] = ar_std_ad_mse
-models['valence_mean']['naive']['adjusted_error'] = va_mean_ad_mse
-models['valence_std']['naive']['adjusted_error'] = va_std_ad_mse
+models['arousal_mean']['naive']['r2'] = ar_mean_ad_mse
+#models['arousal_std']['naive']['r2'] = ar_std_ad_mse
+models['valence_mean']['naive']['r2'] = va_mean_ad_mse
+#models['valence_std']['naive']['r2'] = va_std_ad_mse
 
 
 with open('models', 'w') as f:

@@ -314,10 +314,10 @@ cont_feat.to_parquet(ann_path+'cont_features.pqt')'''
 ###########################
 
 #This time, we get intervals of 5 seconds and with an overlap of 2
-window_size_ms = 10000
+window_size_ms = 5000
 window_shift = 2500
 cont_clip_list = []
-for clip_id in stat_clip_list:
+for clip_id in stat_clip_list[:3]:
     for sam in range(window_size_ms, 45001, window_shift):
         cont_clip_list.append(str(clip_id)+'_'+str(sam))
 
@@ -374,4 +374,4 @@ for clip_id in stat_clip_list:
         cont_feat.loc[str(clip_id)+'_'+str(end_ms)]['valence_mean'] = cont_feat.loc[str(clip_id)+'_15000']['valence_mean']*weigths[i]
         cont_feat.loc[str(clip_id)+'_'+str(end_ms)]['valence_std'] = cont_feat.loc[str(clip_id)+'_15000']['valence_std']*weigths[i]
 
-cont_feat.to_parquet(ann_path+'cont_features_'+str(window_size_ms)+'_new.pqt')
+#cont_feat.to_parquet(ann_path+'cont_features_'+str(window_size_ms)+'_new.pqt')

@@ -10,9 +10,9 @@ info = pd.DataFrame(columns=models.keys())
 
 for metric in models.keys():
 	for model in models[metric].keys():
-		err = models[metric][model]['adjusted_error'] if 'adjusted_error' in models[metric][model].keys() else 0
+		err = round(models[metric][model]['r2'], 3) if 'r2' in models[metric][model].keys() else 0
 		info.loc[model, metric] = err
 
 
-info = info[['arousal_mean', 'valence_mean']]
+#print(info.sort_values(by=['valence_mean']))
 print(info)

@@ -134,25 +134,25 @@ class random_forest_objective(object):
 for set_name, set_train, set_test in train_sets:
     rf_optuna = optuna.create_study(direction='maximize', sampler=optuna.samplers.TPESampler())
     rf_optuna.optimize(random_forest_objective(set_train), n_trials=budget)
-    models[set_name]['static_rf']['best_params'] = rf_optuna.best_params
+    models[set_name]['static']['best_params'] = rf_optuna.best_params
 
     best = ensemble.RandomForestRegressor(
         random_state=random_state,
-        #criterion=models[set_name]['static_rf']['best_params']['criterion'],
-        max_depth=models[set_name]['static_rf']['best_params']['max_depth'],
-        #max_features=models[set_name]['static_rf']['best_params']['max_features'],
-        #min_impurity_decrease=models[set_name]['static_rf']['best_params']['min_impurity_decrease'],
-        min_samples_leaf=models[set_name]['static_rf']['best_params']['min_samples_leaf'],
-        #min_samples_split=models[set_name]['static_rf']['best_params']['min_samples_split'],
-        #min_weight_fraction_leaf=models[set_name][['static_rf']'best_params']['min_weight_fraction_leaf'],
-        n_estimators=models[set_name]['static_rf']['best_params']['n_estimators'],
-        ccp_alpha=models[set_name]['static_rf']['best_params']['ccp_alpha']
+        #criterion=models[set_name]['static']['best_params']['criterion'],
+        max_depth=models[set_name]['static']['best_params']['max_depth'],
+        #max_features=models[set_name]['static']['best_params']['max_features'],
+        #min_impurity_decrease=models[set_name]['static']['best_params']['min_impurity_decrease'],
+        min_samples_leaf=models[set_name]['static']['best_params']['min_samples_leaf'],
+        #min_samples_split=models[set_name]['static']['best_params']['min_samples_split'],
+        #min_weight_fraction_leaf=models[set_name][['static']'best_params']['min_weight_fraction_leaf'],
+        n_estimators=models[set_name]['static']['best_params']['n_estimators'],
+        ccp_alpha=models[set_name]['static']['best_params']['ccp_alpha']
     )
     best = ensemble.RandomForestRegressor()
     best = best.fit(x_train, set_train)
     set_pred = best.predict(x_test)
-    models[set_name]['static_rf']['adjusted_error'] = metrics.r2_score(set_test, set_pred)
-    pickle.dump(best, open(mod_path+'static_model_'+set_name+'.pkl', 'wb'))
+    models[set_name]['static']['r2'] = metrics.r2_score(set_test, set_pred)
+    pickle.dump(best, open(mod_path+'static_'+set_name+'.pkl', 'wb'))
 
 
 #############
@@ -162,20 +162,20 @@ for set_name, set_train, set_test in train_sets:
 '''for set_name, set_train, set_test in train_sets:
     best = ensemble.RandomForestRegressor(
         random_state=random_state,
-        #criterion=models[set_name]['static_rf']['best_params']['criterion'],
-        max_depth=models[set_name]['static_rf']['best_params']['max_depth'],
-        #max_features=models[set_name]['static_rf']['best_params']['max_features'],
-        #min_impurity_decrease=models[set_name]['static_rf']['best_params']['min_impurity_decrease'],
-        min_samples_leaf=models[set_name]['static_rf']['best_params']['min_samples_leaf'],
-        #min_samples_split=models[set_name]['static_rf']['best_params']['min_samples_split'],
-        #min_weight_fraction_leaf=models[set_name][['static_rf']'best_params']['min_weight_fraction_leaf'],
-        n_estimators=models[set_name]['static_rf']['best_params']['n_estimators'],
-        ccp_alpha=models[set_name]['static_rf']['best_params']['ccp_alpha']
+        #criterion=models[set_name]['static']['best_params']['criterion'],
+        max_depth=models[set_name]['static']['best_params']['max_depth'],
+        #max_features=models[set_name]['static']['best_params']['max_features'],
+        #min_impurity_decrease=models[set_name]['static']['best_params']['min_impurity_decrease'],
+        min_samples_leaf=models[set_name]['static']['best_params']['min_samples_leaf'],
+        #min_samples_split=models[set_name]['static']['best_params']['min_samples_split'],
+        #min_weight_fraction_leaf=models[set_name][['static']'best_params']['min_weight_fraction_leaf'],
+        n_estimators=models[set_name]['static']['best_params']['n_estimators'],
+        ccp_alpha=models[set_name]['static']['best_params']['ccp_alpha']
     )
     best = ensemble.RandomForestRegressor()
     best = best.fit(x_train, set_train)
     set_pred = best.predict(x_test)
-    models[set_name]['static_rf']['adjusted_error'] = metrics.r2_score(set_test, set_pred)'''
+    models[set_name]['static']['adjusted_error'] = metrics.r2_score(set_test, set_pred)'''
 
 
 with open('models', 'w') as f:

@@ -332,8 +332,19 @@ We have some tasks for the next week:
 - Feature selection with random forest
 - Create CNN for comparison
 
+##################
+### 05/07/2021 ###
+##################
+8 hours
+Meeting with Emilio. Proposing him the final steps for the TFM:
 
-74 hours
+- Getting the trainning steps with different window sizes and shifts and extract conclusions
+- Feature selection with random forest
+- Do a CNN to compare
+
+Today we are creating the CNN
+
+82 hours
 
 
 

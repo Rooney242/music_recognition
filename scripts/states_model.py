@@ -29,10 +29,12 @@ random_state = 222
 
 #configuration
 conf = json.load(open('models_conf', 'r'))
+mod_name = 'states_'+str(int(int(conf['window_size_ms'])/1000))
+mod_name += '_ov' if conf['window_shift'] else ''
 
 range_start = conf['window_size_ms']
 range_end = 45001
-range_step = conf['window_shift_ms']
+range_step = int(range_start/2) if conf['window_shift'] else range_start
 
 #Getting train and test indices
 df = pd.read_csv(ann_path+'songs_info.csv')
@@ -87,8 +89,8 @@ with open('models', 'r') as f:
 ## GAUSSIAN MIXTURE MODELS ##
 #############################
 #np.set_printoptions(threshold=sys.maxsize)
-stat_model_arousal = pickle.load(open(mod_path+'static_model_arousal_mean.pkl', 'rb'))
-stat_model_valence = pickle.load(open(mod_path+'static_model_valence_mean.pkl', 'rb'))
+stat_model_arousal = pickle.load(open(mod_path+'static_arousal_mean.pkl', 'rb'))
+stat_model_valence = pickle.load(open(mod_path+'static_valence_mean.pkl', 'rb'))
 
 mus_ele = list(dict.fromkeys([i.split('.')[0] for i in x.columns]))
 k_list = range(3,12)
@@ -218,25 +220,25 @@ class random_forest_objective(object):
 for set_name, feat_train, feat_test, set_train, set_test in train_sets:
     rf_optuna = optuna.create_study(direction='maximize', sampler=optuna.samplers.TPESampler())
     rf_optuna.optimize(random_forest_objective(feat_train, set_train), n_trials=budget)
-    models[set_name]['states']['best_params'] = rf_optuna.best_params
+    models[set_name][mod_name]['best_params'] = rf_optuna.best_params
 
     best = ensemble.RandomForestRegressor(
         random_state=random_state,
-        #criterion=models[set_name]['states']['best_params']['criterion'],
-        max_depth=models[set_name]['states']['best_params']['max_depth'],
-        #max_features=models[set_name]['states']['best_params']['max_features'],
-        #min_impurity_decrease=models[set_name]['states']['best_params']['min_impurity_decrease'],
-        min_samples_leaf=models[set_name]['states']['best_params']['min_samples_leaf'],
-        #min_samples_split=models[set_name]['states']['best_params']['min_samples_split'],
-        #min_weight_fraction_leaf=models[set_name][['states']'best_params']['min_weight_fraction_leaf'],
-        n_estimators=models[set_name]['states']['best_params']['n_estimators'],
-        ccp_alpha=models[set_name]['states']['best_params']['ccp_alpha']
+        #criterion=models[set_name][mod_name]['best_params']['criterion'],
+        max_depth=models[set_name][mod_name]['best_params']['max_depth'],
+        #max_features=models[set_name][mod_name]['best_params']['max_features'],
+        #min_impurity_decrease=models[set_name][mod_name]['best_params']['min_impurity_decrease'],
+        min_samples_leaf=models[set_name][mod_name]['best_params']['min_samples_leaf'],
+        #min_samples_split=models[set_name][mod_name]['best_params']['min_samples_split'],
+        #min_weight_fraction_leaf=models[set_name][[mod_name]'best_params']['min_weight_fraction_leaf'],
+        n_estimators=models[set_name][mod_name]['best_params']['n_estimators'],
+        ccp_alpha=models[set_name][mod_name]['best_params']['ccp_alpha']
     )
     best = ensemble.RandomForestRegressor()
     best = best.fit(feat_train, set_train)
     set_pred = best.predict(feat_test)
-    models[set_name]['states']['adjusted_error'] = metrics.r2_score(set_test, set_pred)
-    pickle.dump(best, open(mod_path+'states_model_'+set_name+'.pkl', 'wb'))
+    models[set_name][mod_name]['r2'] = metrics.r2_score(set_test, set_pred)
+    pickle.dump(best, open(mod_path+mod_name+'_'+set_name+'.pkl', 'wb'))
 
 
 #############
@@ -246,20 +248,20 @@ for set_name, feat_train, feat_test, set_train, set_test in train_sets:
 for set_name, set_train, set_test in train_sets:
     best = ensemble.RandomForestRegressor(
         random_state=random_state,
-        #criterion=models[set_name]['states']['best_params']['criterion'],
-        max_depth=models[set_name]['states']['best_params']['max_depth'],
-        #max_features=models[set_name]['states']['best_params']['max_features'],
-        #min_impurity_decrease=models[set_name]['states']['best_params']['min_impurity_decrease'],
-        min_samples_leaf=models[set_name]['states']['best_params']['min_samples_leaf'],
-        #min_samples_split=models[set_name]['states']['best_params']['min_samples_split'],
-        #min_weight_fraction_leaf=models[set_name][['states']'best_params']['min_weight_fraction_leaf'],
-        n_estimators=models[set_name]['states']['best_params']['n_estimators'],
-        ccp_alpha=models[set_name]['states']['best_params']['ccp_alpha']
+        #criterion=models[set_name][mod_name]['best_params']['criterion'],
+        max_depth=models[set_name][mod_name]['best_params']['max_depth'],
+        #max_features=models[set_name][mod_name]['best_params']['max_features'],
+        #min_impurity_decrease=models[set_name][mod_name]['best_params']['min_impurity_decrease'],
+        min_samples_leaf=models[set_name][mod_name]['best_params']['min_samples_leaf'],
+        #min_samples_split=models[set_name][mod_name]['best_params']['min_samples_split'],
+        #min_weight_fraction_leaf=models[set_name][[mod_name]'best_params']['min_weight_fraction_leaf'],
+        n_estimators=models[set_name][mod_name]['best_params']['n_estimators'],
+        ccp_alpha=models[set_name][mod_name]['best_params']['ccp_alpha']
     )
     best = ensemble.RandomForestRegressor()
     best = best.fit(x_train, set_train)
     set_pred = best.predict(x_test)
-    models[set_name]['states']['adjusted_error'] = math.sqrt(metrics.mean_squared_error(set_test, set_pred))/ran(set_test)'''
+    models[set_name][mod_name]['r2'] = math.sqrt(metrics.mean_squared_error(set_test, set_pred))/ran(set_test)'''
 
 
 with open('models', 'w') as f:
