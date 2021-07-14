@@ -90,19 +90,10 @@ Essentia main explanation:
 Essentia algorithm reference for music extractor:
 	https://essentia.upf.edu/streaming_extractor_music.html
 
-++ FEATURE SELECTION ++
-
-Feature extraction description for having a wide variety of features:
-It also have some relation between music and emotions
-	https://www.researchgate.net/publication/346359767_Audio_Features_for_Music_Emotion_Recognition_a_Survey
-
 ++ SYNTHETIC FEATURES ++
 
 Seeing references for synthetic features:
 	https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.734.5247&rep=rep1&type=pdf
-
-Seeing featuretools for development: 
-	https://featuretools.alteryx.com/en/stable/index.html
 
 ++ MER (music emotion recognition) ++
 
@@ -111,20 +102,6 @@ general paper for emotion recognition, could serve as comparison:
 
 jointly prediction of valence, arousal and dominance
 	https://www.isca-speech.org/archive/Interspeech_2017/pdfs/1494.PDF
-
-++ FEATURE PROCESSING TECHNIQUES ++ 
-
-regression approach:
-	https://ieeexplore.ieee.org/abstract/document/4432654?casa_token=0ibhCotCuCwAAAAA:bISQfLgvuTnSex3lIfjh5K-PmXWCa5c8NY9udO9iBxUTg26EYrhrfKen_l7fYoqHDmdpJaQuvg
-
-using svm:
-	https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.164.1582&rep=rep1&type=pdf
-
-bag of words for music:
-	https://ieeexplore.ieee.org/abstract/document/7458322?casa_token=IJ5XiV5kucYAAAAA:M96keX2INB9q86qkGKRVIc45X3-G0clHCtS1E2X4fjWdsB_kbpuSXbvGO85DEINGOQR_ynfp2Q
-
-bag of words for sentiment:
-	https://ieeexplore.ieee.org/abstract/document/8462660?casa_token=S53Dpof0UdgAAAAA:MZq_pD3lV-zVPq2u12sPaSf6zmrewm92NYFmGIzV7yVmaFu2VJq6EmgZEJ6EOwe8huRcSIwBsQ
 
 
 ###############
@@ -141,3 +118,54 @@ Using the valence-arousal representation of emotions and adding a dominance dime
 The common approach to design an automatic MER system with machine learning is to represent emotions in terms of three real-valued scores, valence, arousal and dominance, and then train a machine learning model able to predict those two scores from features extracted from the audio signals. The recent advances in deep learning have brought approaches in which the raw audio signals, or the spectrograms are directly fed into these deep learning models, and the deep learning model performs the automatic feature extraction and the construction of the model. These approaches achieve outstanding performances in terms of the accuracy of their predictions, but with significant limitation of the interpretability of the models by humans. On the other hand, the more classic approaches involving training automatic regressors like linear models or Gaussian Processes trained with high level, music-theory-based features are easier to interpret in terms of the role of each feature in the identification of the emotions. 
 
 This thesis explores a new approach that aims to enable the control of the trade-off between the interpretability and the accuracy of such systems by training automatic regressors like linear models with synthetic features resulting from systematic compositions of the high level, music-theory based features.
+
+
+
+
+
+
+++ MUSIC THEORY ++
+Feature extraction description for having a wide variety of features:
+It also have some relation between music and emotions
+	https://www.researchgate.net/publication/346359767_Audio_Features_for_Music_Emotion_Recognition_a_Survey
+
+doreque
+
+spectral features definition:
+	https://link.springer.com/article/10.1155/S1110865703210118#citeas
+
+spectral features outperforms
+
+
+++ Machine learning methods ++
+
+--regression approach:
+	https://ieeexplore.ieee.org/abstract/document/4432654?casa_token=0ibhCotCuCwAAAAA:bISQfLgvuTnSex3lIfjh5K-PmXWCa5c8NY9udO9iBxUTg26EYrhrfKen_l7fYoqHDmdpJaQuvg
+
+--using svm:
+	https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.164.1582&rep=rep1&type=pdf
+
+--overfitting and kfold
+	https://arxiv.org/abs/1905.12787
+
+--gaussian mixture models
+	http://leap.ee.iisc.ac.in/sriram/teaching/MLSP_16/refs/GMM_Tutorial_Reynolds.pdf
+
+--bag of words for music:
+	https://ieeexplore.ieee.org/abstract/document/7458322?casa_token=IJ5XiV5kucYAAAAA:M96keX2INB9q86qkGKRVIc45X3-G0clHCtS1E2X4fjWdsB_kbpuSXbvGO85DEINGOQR_ynfp2Q
+
+--bag of words for sentiment:
+	https://ieeexplore.ieee.org/abstract/document/8462660?casa_token=S53Dpof0UdgAAAAA:MZq_pD3lV-zVPq2u12sPaSf6zmrewm92NYFmGIzV7yVmaFu2VJq6EmgZEJ6EOwe8huRcSIwBsQ
+
+--hidden markov models for melodies classification
+	https://ieeexplore.ieee.org/abstract/document/990162
+
+cnn for audio
+	https://arxiv.org/abs/1611.09524
+
+early stopping
+	https://link.springer.com/chapter/10.1007/3-540-49430-8_3
+
+dropout
+	http://www.cs.toronto.edu/~nitish/msc_thesis.pdf
+

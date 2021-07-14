@@ -1,4 +1,4 @@
-import os
+arimport os
 import numpy as np              
 import pandas as pd
 import matplotlib.pyplot as plt 
@@ -54,7 +54,6 @@ for song_id in song_id_test:
 
 #Loading data for trainning and testing
 cont = pd.read_parquet(ann_path+'cont_selected_features_'+str(range_start)+'.pqt')
-
 x = cont
 x_train = x.loc[train_idx]
 x_test = x.loc[test_idx]
@@ -109,8 +108,8 @@ for m in mus_ele:
     gmm_feat[m] = mixture.GaussianMixture(n_components=min_k,covariance_type='diag').fit(x_me)
 
 
-states_train_arousal = np.zeros((len(song_id_train), sum(mus_k)+1))
-states_train_valence = np.zeros((len(song_id_train), sum(mus_k)+1))
+states_train_arousal = np.zeros((len(song_id_train), sum(mus_k)+x_train_stat.shape[1]))
+states_train_valence = np.zeros((len(song_id_train), sum(mus_k)+x_train_stat.shape[1]))
 for i, song_id in enumerate(song_id_train):
     cont = 0
     for j, m in enumerate(mus_ele):
@@ -122,11 +121,11 @@ for i, song_id in enumerate(song_id_train):
             states_train_arousal[i][rst] = states_train_valence[i][rst] = song_states[st] if st in song_states.keys() else 0
         cont += mus_k[j]
     
-    states_train_arousal[i][-1] = stat_model_arousal.predict(x_train_stat.loc[song_id].to_numpy().reshape(1,-1))
-    states_train_valence[i][-1] = stat_model_valence.predict(x_train_stat.loc[song_id].to_numpy().reshape(1,-1))
+    states_train_arousal[i][sum(mus_k):] = x_train_stat.loc[song_id].to_numpy().reshape(1,-1)
+    states_train_valence[i][sum(mus_k):] = x_train_stat.loc[song_id].to_numpy().reshape(1,-1)
 
-states_test_arousal = np.zeros((len(song_id_test), sum(mus_k)+1))
-states_test_valence = np.zeros((len(song_id_test), sum(mus_k)+1))
+states_test_arousal = np.zeros((len(song_id_test), sum(mus_k)+x_test_stat.shape[1]))
+states_test_valence = np.zeros((len(song_id_test), sum(mus_k)+x_test_stat.shape[1]))
 for i, song_id in enumerate(song_id_test):
     cont = 0
     for j, m in enumerate(mus_ele):
@@ -138,8 +137,8 @@ for i, song_id in enumerate(song_id_test):
             states_test_arousal[i][rst] = states_test_valence[i][rst] = song_states[st] if st in song_states.keys() else 0
         cont += mus_k[j]
     
-    states_test_arousal[i][-1] = stat_model_arousal.predict(x_test_stat.loc[song_id].to_numpy().reshape(1,-1))
-    states_test_valence[i][-1] = stat_model_valence.predict(x_test_stat.loc[song_id].to_numpy().reshape(1,-1))
+    states_test_arousal[i][sum(mus_k):] = x_test_stat.loc[song_id].to_numpy().reshape(1,-1)
+    states_test_valence[i][sum(mus_k):] = x_test_stat.loc[song_id].to_numpy().reshape(1,-1)
 
 
 
@@ -195,7 +194,7 @@ class random_forest_objective(object):
             #min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             #min_weight_fraction_leaf=min_weight_fraction_leaf,
-            #min_impurity_decrease=min_impurity_decrease,
+            min_impurity_decrease=min_impurity_decrease,
             #max_features=max_features,
             ccp_alpha=ccp_alpha
             )
@@ -227,7 +226,7 @@ for set_name, feat_train, feat_test, set_train, set_test in train_sets:
         #criterion=models[set_name][mod_name]['best_params']['criterion'],
         max_depth=models[set_name][mod_name]['best_params']['max_depth'],
         #max_features=models[set_name][mod_name]['best_params']['max_features'],
-        #min_impurity_decrease=models[set_name][mod_name]['best_params']['min_impurity_decrease'],
+        min_impurity_decrease=models[set_name][mod_name]['best_params']['min_impurity_decrease'],
         min_samples_leaf=models[set_name][mod_name]['best_params']['min_samples_leaf'],
         #min_samples_split=models[set_name][mod_name]['best_params']['min_samples_split'],
         #min_weight_fraction_leaf=models[set_name][[mod_name]'best_params']['min_weight_fraction_leaf'],
@@ -238,7 +237,7 @@ for set_name, feat_train, feat_test, set_train, set_test in train_sets:
     best = best.fit(feat_train, set_train)
     set_pred = best.predict(feat_test)
     models[set_name][mod_name]['r2'] = metrics.r2_score(set_test, set_pred)
-    pickle.dump(best, open(mod_path+mod_name+'_'+set_name+'.pkl', 'wb'))
+    #pickle.dump(best, open(mod_path+mod_name+'_'+set_name+'.pkl', 'wb'))
 
 
 #############

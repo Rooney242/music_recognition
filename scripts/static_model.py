@@ -56,6 +56,8 @@ ar_std_test = ar_std.loc[test_idx]
 va_mean_test = va_mean.loc[test_idx]
 va_std_test = va_std.loc[test_idx]
 
+
+
 #train_sets = [('arousal_mean', ar_mean_train, ar_mean_test), ('arousal_std', ar_std_train, ar_std_test), ('valence_mean', va_mean_train, va_mean_test), ('valence_std', va_std_train, va_std_test)]
 train_sets = [('arousal_mean', ar_mean_train, ar_mean_test), ('valence_mean', va_mean_train, va_mean_test)]
 
@@ -109,7 +111,7 @@ class random_forest_objective(object):
             #min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             #min_weight_fraction_leaf=min_weight_fraction_leaf,
-            #min_impurity_decrease=min_impurity_decrease,
+            min_impurity_decrease=min_impurity_decrease,
             #max_features=max_features,
             ccp_alpha=ccp_alpha
             )
@@ -141,7 +143,7 @@ for set_name, set_train, set_test in train_sets:
         #criterion=models[set_name]['static']['best_params']['criterion'],
         max_depth=models[set_name]['static']['best_params']['max_depth'],
         #max_features=models[set_name]['static']['best_params']['max_features'],
-        #min_impurity_decrease=models[set_name]['static']['best_params']['min_impurity_decrease'],
+        min_impurity_decrease=models[set_name]['static']['best_params']['min_impurity_decrease'],
         min_samples_leaf=models[set_name]['static']['best_params']['min_samples_leaf'],
         #min_samples_split=models[set_name]['static']['best_params']['min_samples_split'],
         #min_weight_fraction_leaf=models[set_name][['static']'best_params']['min_weight_fraction_leaf'],
