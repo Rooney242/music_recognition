@@ -116,7 +116,6 @@ class audio_cnn(nn.Module):
 
         # Spatial dimension of the Tensor at the output of the 2nd CNN
         self.final_dim = channels[2]*int((int((dimx - (kernel_size - 1))/stride/max_pool) - (kernel_size - 1))/stride/max_pool)
-        print(self.final_dim)
 
         # Linear layers
         self.linear1 = nn.Linear(self.final_dim, neurons[0]) 
@@ -127,7 +126,9 @@ class audio_cnn(nn.Module):
         
         self.logsoftmax = nn.LogSoftmax(dim=1) 
         
-        self.dropout = nn.Dropout(p=pdropout)       
+        self.dropout = nn.Dropout(p=pdropout)
+
+        print(dimx,  self.final_dim)
     
     def forward(self, x):
         # Pass the input tensor through the CNN operations

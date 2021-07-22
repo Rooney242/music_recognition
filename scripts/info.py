@@ -13,6 +13,6 @@ for metric in models.keys():
 		err = round(models[metric][model]['r2'], 3) if 'r2' in models[metric][model].keys() else 0
 		info.loc[model, metric] = err
 
-print(info.sort_values(by=['arousal_mean']))
-print(info.sort_values(by=['valence_mean']))
-#print(info)
+#print(info.sort_values(by=['arousal_mean']))
+#print(info.sort_values(by=['valence_mean']))
+print(info)

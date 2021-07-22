@@ -163,7 +163,7 @@ cont_feat_dic = {
 #####################
 ## STATIC FEATURES ##
 #####################
-'''stat_column_list = []
+stat_column_list = []
 for mus_dim, mus_dim_val in stat_feat_dic.items():
     for mus_elem, mus_elem_val in mus_dim_val.items():
         for mus_feat, mus_feat_val in mus_elem_val.items():
@@ -173,12 +173,13 @@ for mus_dim, mus_dim_val in stat_feat_dic.items():
                         stat_column_list.append('.'.join([mus_dim, mus_elem, mus_feat, char])+'_'+str(i))
                 else:
                     stat_column_list.append('.'.join([mus_dim, mus_elem, mus_feat, char]))
-stat_column_list.append('arousal_mean')
+print(len(stat_column_list))
+'''stat_column_list.append('arousal_mean')
 stat_column_list.append('arousal_std')
 stat_column_list.append('valence_mean')
-stat_column_list.append('valence_std')
+stat_column_list.append('valence_std')'''
 
-df = pd.read_parquet(ann_path+'static_features.pqt')
+'''df = pd.read_parquet(ann_path+'static_features.pqt')
 df = df[stat_column_list]
 
 key_to_int = {
@@ -217,7 +218,7 @@ df['valence_std'] = df['valence_std'].apply(lambda x: x/4)
 
 print(df.shape)
 
-df.to_parquet(ann_path+'static_selected_features.pqt')'''
+#df.to_parquet(ann_path+'static_selected_features.pqt')'''
 
 #########################
 ## CONTINUOUS FEATURES ##
@@ -233,10 +234,11 @@ for mus_dim, mus_dim_val in cont_feat_dic.items():
                         cont_column_list.append('.'.join([mus_dim, mus_elem, mus_feat, char])+'_'+str(i))
                 else:
                     cont_column_list.append('.'.join([mus_dim, mus_elem, mus_feat, char]))
+print(len(cont_column_list))
 '''cont_column_list.append('arousal_mean')
 cont_column_list.append('arousal_std')
 cont_column_list.append('valence_mean')
-cont_column_list.append('valence_std')'''
+cont_column_list.append('valence_std')
 
 stat = pd.read_parquet(ann_path+'static_features.pqt')
 
@@ -244,4 +246,4 @@ df = pd.read_parquet(ann_path+'cont_features_5000.pqt')
 df = df[cont_column_list]
 
 print(df.shape)
-df.to_parquet(ann_path+'cont_selected_features_5000.pqt')
+df.to_parquet(ann_path+'cont_selected_features_5000.pqt')'''
